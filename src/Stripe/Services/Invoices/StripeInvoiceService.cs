@@ -3,13 +3,16 @@ using System.Collections.Generic;
 
 namespace Stripe
 {
-	public class StripeInvoiceService
+	public class StripeInvoiceService : StripeService
 	{
-		private string ApiKey { get; set; }
-
 		public StripeInvoiceService(string apiKey = null)
+			: base(apiKey)
 		{
-			ApiKey = apiKey;
+		}
+
+		public StripeInvoiceService(string apiKey, IMapper mapper, IRequestor requestor, IParameterBuilder parameterBuilder)
+			: base(apiKey, mapper, requestor, parameterBuilder)
+		{
 		}
 
 		public virtual StripeInvoice Get(string invoiceId)
@@ -18,7 +21,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeInvoice>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeInvoice>(response);
 		}
 
 		public virtual StripeInvoice Upcoming(string customerId, string subscriptionId = null)
@@ -27,12 +30,12 @@ namespace Stripe
 
 			url = ParameterBuilder.ApplyParameterToUrl(url, "customer", customerId);
 
-			if(!String.IsNullOrEmpty(subscriptionId))
+			if (!String.IsNullOrEmpty(subscriptionId))
 				url = ParameterBuilder.ApplyParameterToUrl(url, "subscription", subscriptionId);
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeInvoice>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeInvoice>(response);
 		}
 
 		public virtual StripeInvoice Update(string invoiceId, StripeInvoiceUpdateOptions updateOptions)
@@ -42,7 +45,7 @@ namespace Stripe
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripeInvoice>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeInvoice>(response);
 		}
 
 		public virtual StripeInvoice Pay(string invoiceId)
@@ -51,7 +54,7 @@ namespace Stripe
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripeInvoice>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeInvoice>(response);
 		}
 
 		public virtual IEnumerable<StripeInvoice> List(StripeInvoiceListOptions listOptions = null)
@@ -63,7 +66,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeInvoice>.MapCollectionFromJson(response);
+			return Mapper.MapCollectionFromJson<StripeInvoice>(response);
 		}
 
 		public virtual StripeInvoice Create(string customerId)
@@ -73,7 +76,7 @@ namespace Stripe
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripeInvoice>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeInvoice>(response);
 		}
 	}
 }

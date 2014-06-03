@@ -2,13 +2,16 @@
 
 namespace Stripe
 {
-	public class StripeTransferService
+	public class StripeTransferService : StripeService
 	{
-		private string ApiKey { get; set; }
-
 		public StripeTransferService(string apiKey = null)
+			: base(apiKey)
 		{
-			ApiKey = apiKey;
+		}
+
+		public StripeTransferService(string apiKey, IMapper mapper, IRequestor requestor, IParameterBuilder parameterBuilder)
+			: base(apiKey, mapper, requestor, parameterBuilder)
+		{
 		}
 
 		public virtual StripeTransfer Create(StripeTransferCreateOptions createOptions)
@@ -17,7 +20,7 @@ namespace Stripe
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripeTransfer>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeTransfer>(response);
 		}
 
 		public virtual StripeTransfer Get(string transferId)
@@ -26,7 +29,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeTransfer>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeTransfer>(response);
 		}
 
 		public virtual StripeTransfer Cancel(string transferId)
@@ -35,7 +38,7 @@ namespace Stripe
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripeTransfer>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeTransfer>(response);
 		}
 
 		public virtual IEnumerable<StripeTransfer> List(StripeTransferListOptions listOptions = null)
@@ -47,7 +50,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeTransfer>.MapCollectionFromJson(response);
+			return Mapper.MapCollectionFromJson<StripeTransfer>(response);
 		}
 	}
 }

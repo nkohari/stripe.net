@@ -1,19 +1,22 @@
 ﻿namespace Stripe
 {
-	public class StripeAccountService
+	public class StripeAccountService : StripeService
 	{
-		private string ApiKey { get; set; }
-
 		public StripeAccountService(string apiKey = null)
+			: base(apiKey)
 		{
-			ApiKey = apiKey;
+		}
+
+		public StripeAccountService(string apiKey, IMapper mapper, IRequestor requestor, IParameterBuilder parameterBuilder)
+			: base(apiKey, mapper, requestor, parameterBuilder)
+		{
 		}
 
 		public virtual StripeAccount Get()
 		{
 			var response = Requestor.GetString(Urls.Account, ApiKey);
 
-			return Mapper<StripeAccount>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeAccount>(response);
 		}
 	}
 }

@@ -9,20 +9,20 @@ namespace Stripe.Tests
 		{
 			get { return true; }
 		}
-		
+
 		public void ProcessRequest(HttpContext context)
 		{
+			var mapper = new Mapper();
 			var json = new StreamReader(context.Request.InputStream).ReadToEnd();
-
-			var stripeEvent = StripeEventUtility.ParseEvent(json);
+			var stripeEvent = mapper.MapFromJson<StripeEvent>(json);
 
 			switch (stripeEvent.Type)
 			{
 				case "charge.refunded":
-					var stripeCharge = Stripe.Mapper<StripeCharge>.MapFromJson(stripeEvent.Data.Object.ToString());
+					var stripeCharge = mapper.MapFromJson<StripeCharge>(stripeEvent.Data.Object.ToString());
 					break;
 				case "charge.dispute.created":
-					var stripeDispute = Stripe.Mapper<StripeDispute>.MapFromJson(stripeEvent.Data.Object.ToString());
+					var stripeDispute = mapper.MapFromJson<StripeDispute>(stripeEvent.Data.Object.ToString());
 					break;
 			}
 		}

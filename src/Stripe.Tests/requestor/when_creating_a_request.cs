@@ -9,12 +9,13 @@ namespace Stripe.Tests
 {
 	public class when_creating_a_request
 	{
+		private static IRequestor _requestor = new Requestor();
 		private static HttpWebRequest _request;
 		private const string url = "http://testurl/foo";
 		private const string method = "method";
 
 		Because of = () =>
-			_request = (HttpWebRequest) Requestor.GetWebRequest(url, method);
+			_request = (HttpWebRequest)_requestor.GetWebRequest(url, method);
 
 		It should_have_matching_url = () =>
 			_request.RequestUri.ToString().ShouldEqual(url);

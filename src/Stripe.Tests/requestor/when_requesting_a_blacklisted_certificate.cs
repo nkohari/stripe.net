@@ -6,10 +6,11 @@ namespace Stripe.Tests
 {
 	public class when_requesting_a_blacklisted_certificate
 	{
+        protected static IRequestor _requestor = new Requestor();
 		protected static Exception ex;
 
 		Because of = () =>
-			ex = Catch.Exception(() => Requestor.GetString("https://revoked.stripe.com:444/", ""));
+			ex = Catch.Exception(() => _requestor.GetString("https://revoked.stripe.com:444/", ""));
 
 		It should_raise_an_authentication_exception = () =>
 			ex.ShouldBeOfType<WebException>();

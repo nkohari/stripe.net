@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E48E9AC1-3A88-406B-82FF-166B1E3C7A48}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -35,18 +33,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
@@ -103,7 +100,6 @@
     <Compile Include="Services\Disputes\StripeDisputeService.cs" />
     <Compile Include="Services\Events\StripeEventListOptions.cs" />
     <Compile Include="Services\Events\StripeEventService.cs" />
-    <Compile Include="Services\Events\StripeEventUtility.cs" />
     <Compile Include="Services\InvoiceItems\StripeInvoiceItemListOptions.cs" />
     <Compile Include="Services\InvoiceItems\StripeInvoiceItemUpdateOptions.cs" />
     <Compile Include="Services\InvoiceItems\StripeInvoiceItemCreateOptions.cs" />
@@ -141,6 +137,10 @@
     <Compile Include="Services\Transfers\StripeTransferListOptions.cs" />
     <Compile Include="Services\Transfers\StripeTransferCreateOptions.cs" />
     <Compile Include="Services\Transfers\StripeTransferService.cs" />
+    <Compile Include="Infrastructure\Interfaces\IRequestor.cs" />
+    <Compile Include="Infrastructure\Interfaces\IMapper.cs" />
+    <Compile Include="Infrastructure\Interfaces\IParameterBuilder.cs" />
+    <Compile Include="Infrastructure\StripeService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -159,4 +159,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Infrastructure\Interfaces\" />
+  </ItemGroup>
 </Project>

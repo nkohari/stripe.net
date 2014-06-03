@@ -2,27 +2,30 @@
 
 namespace Stripe
 {
-	public class StripeBalanceService
+	public class StripeBalanceService : StripeService
 	{
-		private string ApiKey { get; set; }
-
 		public StripeBalanceService(string apiKey = null)
+			: base(apiKey)
 		{
-			ApiKey = apiKey;
+		}
+
+		public StripeBalanceService(string apiKey, IMapper mapper, IRequestor requestor, IParameterBuilder parameterBuilder)
+			: base(apiKey, mapper, requestor, parameterBuilder)
+		{
 		}
 
 		public virtual StripeBalance Get()
 		{
 			var response = Requestor.GetString(Urls.Balance, ApiKey);
 			
-			return Mapper<StripeBalance>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeBalance>(response);
 		}
 
 		public virtual StripeBalanceTransaction Get(string id)
 		{
 			var response = Requestor.GetString(string.Format(Urls.SpecificBalanceTransaction, id));
 
-			return Mapper<StripeBalanceTransaction>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeBalanceTransaction>(response);
 		}
 
 		public virtual IEnumerable<StripeBalanceTransaction> List(StripeBalanceTransactionListOptions options = null)
@@ -34,7 +37,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url);
 
-			return Mapper<StripeBalanceTransaction>.MapCollectionFromJson(response);
+			return Mapper.MapCollectionFromJson<StripeBalanceTransaction>(response);
 		}
 	}
 }

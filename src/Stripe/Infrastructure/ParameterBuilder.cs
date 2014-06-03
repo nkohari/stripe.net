@@ -10,9 +10,9 @@ using Stripe.Infrastructure;
 
 namespace Stripe
 {
-	internal static class ParameterBuilder
+	public class ParameterBuilder : IParameterBuilder
 	{
-		public static string ApplyAllParameters(object obj, string url)
+		public string ApplyAllParameters(object obj, string url)
 		{
 			if (obj == null) return url;
 
@@ -24,7 +24,8 @@ namespace Stripe
 				{
 					var value = property.GetValue(obj, null);
 
-					if (value == null) continue;
+					if (value == null)
+						continue;
 
 					if (string.Compare(attribute.PropertyName, "metadata", true) == 0)
 					{
@@ -37,22 +38,21 @@ namespace Stripe
 					}
 					else if (property.PropertyType == typeof(StripeDateFilter))
 					{
-						var filter = (StripeDateFilter) value;
+						var filter = (StripeDateFilter)value;
 
 						if (filter.EqualTo.HasValue)
 							newUrl = ApplyParameterToUrl(newUrl, attribute.PropertyName, filter.EqualTo.Value.ConvertDateTimeToEpoch().ToString());
-						else
-							if (filter.LessThan.HasValue)
-								newUrl = ApplyParameterToUrl(newUrl, attribute.PropertyName + "[lt]", filter.LessThan.Value.ConvertDateTimeToEpoch().ToString());
+						else if (filter.LessThan.HasValue)
+							newUrl = ApplyParameterToUrl(newUrl, attribute.PropertyName + "[lt]", filter.LessThan.Value.ConvertDateTimeToEpoch().ToString());
 
-							if (filter.LessThanOrEqual.HasValue)
-								newUrl = ApplyParameterToUrl(newUrl, attribute.PropertyName + "[lte]", filter.LessThanOrEqual.Value.ConvertDateTimeToEpoch().ToString());
+						if (filter.LessThanOrEqual.HasValue)
+							newUrl = ApplyParameterToUrl(newUrl, attribute.PropertyName + "[lte]", filter.LessThanOrEqual.Value.ConvertDateTimeToEpoch().ToString());
 
-							if (filter.GreaterThan.HasValue)
-								newUrl = ApplyParameterToUrl(newUrl, attribute.PropertyName + "[gt]", filter.GreaterThan.Value.ConvertDateTimeToEpoch().ToString());
+						if (filter.GreaterThan.HasValue)
+							newUrl = ApplyParameterToUrl(newUrl, attribute.PropertyName + "[gt]", filter.GreaterThan.Value.ConvertDateTimeToEpoch().ToString());
 
-							if (filter.GreaterThanOrEqual.HasValue)
-								newUrl = ApplyParameterToUrl(newUrl, attribute.PropertyName + "[gte]", filter.GreaterThanOrEqual.Value.ConvertDateTimeToEpoch().ToString());
+						if (filter.GreaterThanOrEqual.HasValue)
+							newUrl = ApplyParameterToUrl(newUrl, attribute.PropertyName + "[gte]", filter.GreaterThanOrEqual.Value.ConvertDateTimeToEpoch().ToString());
 					}
 					else
 					{
@@ -64,7 +64,7 @@ namespace Stripe
 			return newUrl;
 		}
 
-		public static string ApplyParameterToUrl(string url, string argument, string value)
+		public string ApplyParameterToUrl(string url, string argument, string value)
 		{
 			var token = "&";
 

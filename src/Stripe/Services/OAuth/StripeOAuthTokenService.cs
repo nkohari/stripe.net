@@ -1,12 +1,15 @@
 ﻿namespace Stripe
 {
-	public class StripeOAuthTokenService
+	public class StripeOAuthTokenService : StripeService
 	{
-		private string ApiKey { get; set; }
-
 		public StripeOAuthTokenService(string apiKey = null)
+			: base(apiKey)
 		{
-			ApiKey = apiKey;
+		}
+
+		public StripeOAuthTokenService(string apiKey, IMapper mapper, IRequestor requestor, IParameterBuilder parameterBuilder)
+			: base(apiKey, mapper, requestor, parameterBuilder)
+		{
 		}
 
 		public virtual StripeOAuthToken Create(StripeOAuthTokenCreateOptions createOptions)
@@ -15,7 +18,7 @@
 
 			var response = Requestor.PostStringBearer(url, ApiKey);
 
-			return Mapper<StripeOAuthToken>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeOAuthToken>(response);
 		}
 	}
 }

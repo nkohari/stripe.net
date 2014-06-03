@@ -2,13 +2,16 @@
 
 namespace Stripe
 {
-	public class StripeCouponService
+	public class StripeCouponService : StripeService
 	{
-		private string ApiKey { get; set; }
-
 		public StripeCouponService(string apiKey = null)
+			: base(apiKey)
 		{
-			ApiKey = apiKey;
+		}
+
+		public StripeCouponService(string apiKey, IMapper mapper, IRequestor requestor, IParameterBuilder parameterBuilder)
+			: base(apiKey, mapper, requestor, parameterBuilder)
+		{
 		}
 
 		public virtual StripeCoupon Create(StripeCouponCreateOptions createOptions)
@@ -17,7 +20,7 @@ namespace Stripe
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripeCoupon>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeCoupon>(response);
 		}
 
 		public virtual StripeCoupon Get(string couponId)
@@ -26,7 +29,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeCoupon>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeCoupon>(response);
 		}
 
 		public virtual void Delete(string couponId)
@@ -45,7 +48,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeCoupon>.MapCollectionFromJson(response);
+			return Mapper.MapCollectionFromJson<StripeCoupon>(response);
 		}
 	}
 }

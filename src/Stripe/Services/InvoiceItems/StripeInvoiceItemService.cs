@@ -2,13 +2,16 @@
 
 namespace Stripe
 {
-	public class StripeInvoiceItemService
+	public class StripeInvoiceItemService : StripeService
 	{
-		private string ApiKey { get; set; }
-
 		public StripeInvoiceItemService(string apiKey = null)
+			: base(apiKey)
 		{
-			ApiKey = apiKey;
+		}
+
+		public StripeInvoiceItemService(string apiKey, IMapper mapper, IRequestor requestor, IParameterBuilder parameterBuilder)
+			: base(apiKey, mapper, requestor, parameterBuilder)
+		{
 		}
 
 		public virtual StripeInvoiceItem Create(StripeInvoiceItemCreateOptions createOptions)
@@ -17,7 +20,7 @@ namespace Stripe
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripeInvoiceItem>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeInvoiceItem>(response);
 		}
 
 		public virtual StripeInvoiceItem Get(string invoiceItemId)
@@ -26,7 +29,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeInvoiceItem>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeInvoiceItem>(response);
 		}
 
 		public virtual StripeInvoiceItem Update(string invoiceItemId, StripeInvoiceItemUpdateOptions updateOptions)
@@ -36,7 +39,7 @@ namespace Stripe
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripeInvoiceItem>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeInvoiceItem>(response);
 		}
 
 		public virtual void Delete(string invoiceItemId)
@@ -55,7 +58,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeInvoiceItem>.MapCollectionFromJson(response);
+			return Mapper.MapCollectionFromJson<StripeInvoiceItem>(response);
 		}
 	}
 }

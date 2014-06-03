@@ -2,13 +2,16 @@
 
 namespace Stripe
 {
-	public class StripeCustomerService
+	public class StripeCustomerService : StripeService
 	{
-		private string ApiKey { get; set; }
-
 		public StripeCustomerService(string apiKey = null)
+			: base(apiKey)
 		{
-			ApiKey = apiKey;
+		}
+
+		public StripeCustomerService(string apiKey, IMapper mapper, IRequestor requestor, IParameterBuilder parameterBuilder)
+			: base(apiKey, mapper, requestor, parameterBuilder)
+		{
 		}
 
 		public virtual StripeCustomer Create(StripeCustomerCreateOptions createOptions)
@@ -17,7 +20,7 @@ namespace Stripe
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripeCustomer>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeCustomer>(response);
 		}
 
 		public virtual StripeCustomer Get(string customerId)
@@ -26,7 +29,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeCustomer>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeCustomer>(response);
 		}
 
 		public virtual StripeCustomer Update(string customerId, StripeCustomerUpdateOptions updateOptions)
@@ -36,7 +39,7 @@ namespace Stripe
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripeCustomer>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeCustomer>(response);
 		}
 
 		public virtual void Delete(string customerId)
@@ -55,7 +58,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeCustomer>.MapCollectionFromJson(response);
+			return Mapper.MapCollectionFromJson<StripeCustomer>(response);
 		}
 	}
 }

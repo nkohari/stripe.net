@@ -3,13 +3,16 @@ using System.Collections.Generic;
 
 namespace Stripe
 {
-	public class StripeSubscriptionService
+	public class StripeSubscriptionService : StripeService
 	{
-		private string ApiKey { get; set; }
-
 		public StripeSubscriptionService(string apiKey = null)
+			: base(apiKey)
 		{
-			ApiKey = apiKey;
+		}
+
+		public StripeSubscriptionService(string apiKey, IMapper mapper, IRequestor requestor, IParameterBuilder parameterBuilder)
+			: base(apiKey, mapper, requestor, parameterBuilder)
+		{
 		}
 
 		public virtual StripeSubscription Get(string customerId, string subscriptionId)
@@ -18,7 +21,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeSubscription>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeSubscription>(response);
 		}
 
 		public virtual StripeSubscription Create(string customerId, string planId, StripeSubscriptionCreateOptions createOptions)
@@ -29,7 +32,7 @@ namespace Stripe
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripeSubscription>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeSubscription>(response);
 		}
 
 		public virtual StripeSubscription Update(string customerId, string subscriptionId, StripeSubscriptionUpdateOptions updateOptions)
@@ -39,7 +42,7 @@ namespace Stripe
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripeSubscription>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeSubscription>(response);
 		}
 
 		public virtual StripeSubscription Cancel(string customerId, string subscriptionId, bool cancelAtPeriodEnd = false)
@@ -49,7 +52,7 @@ namespace Stripe
 
 			var response = Requestor.Delete(url, ApiKey);
 
-			return Mapper<StripeSubscription>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeSubscription>(response);
 		}
 
 		public virtual IEnumerable<StripeSubscription> List(string customerId, StripeListOptions listOptions = null)
@@ -61,7 +64,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeSubscription>.MapCollectionFromJson(response);
+			return Mapper.MapCollectionFromJson<StripeSubscription>(response);
 		}
 	}
 }

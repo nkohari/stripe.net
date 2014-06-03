@@ -2,22 +2,15 @@
 
 namespace Stripe
 {
-	public class StripeApplicationFeeService
+	public class StripeApplicationFeeService : StripeService
 	{
-		private string ApiKey { get; set; }
-
-		public StripeApplicationFeeService(string apiKey = null)
-		{
-			ApiKey = apiKey;
-		}
-
 		public virtual StripeApplicationFee Get(string applicationFeeId)
 		{
 			var url = string.Format("{0}/{1}", Urls.ApplicationFees, applicationFeeId);
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeApplicationFee>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeApplicationFee>(response);
 		}
 
 		public virtual StripeApplicationFee Refund(string applicationFeeId, int? refundAmount = null)
@@ -29,7 +22,7 @@ namespace Stripe
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripeApplicationFee>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeApplicationFee>(response);
 		}
 
 		public virtual IEnumerable<StripeApplicationFee> List(StripeApplicationFeeListOptions listOptions)
@@ -41,7 +34,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeApplicationFee>.MapCollectionFromJson(response);
+			return Mapper.MapCollectionFromJson<StripeApplicationFee>(response);
 		}
 	}
 }

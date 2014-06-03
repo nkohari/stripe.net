@@ -11,13 +11,14 @@ namespace Stripe.Tests
 	[Serial]
 	public class when_requesting_an_old_api_version
 	{
+		protected static IRequestor _requestor = new Requestor();
 		protected static string _response;
 
 		Because of = () =>
 		{
 			StripeConfiguration.ApiVersion = "2014-03-13"; // adds old Count property to list methods
 
-			_response = Requestor.GetString(Urls.Customers);
+			_response = _requestor.GetString(Urls.Customers);
 
 			// restore main supported API version
 			StripeConfiguration.ApiVersion = StripeConfiguration.SupportedApiVersion;

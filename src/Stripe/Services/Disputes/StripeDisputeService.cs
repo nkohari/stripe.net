@@ -1,12 +1,15 @@
 ﻿namespace Stripe
 {
-	public class StripeDisputeService
+	public class StripeDisputeService : StripeService
 	{
-		private string ApiKey { get; set; }
-
 		public StripeDisputeService(string apiKey = null)
+			: base(apiKey)
 		{
-			ApiKey = apiKey;
+		}
+
+		public StripeDisputeService(string apiKey, IMapper mapper, IRequestor requestor, IParameterBuilder parameterBuilder)
+			: base(apiKey, mapper, requestor, parameterBuilder)
+		{
 		}
 
 		public virtual StripeDispute Update(string chargeId, string evidence = null)
@@ -18,7 +21,7 @@
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripeDispute>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeDispute>(response);
 		}
 	}
 }

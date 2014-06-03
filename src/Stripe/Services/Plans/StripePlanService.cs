@@ -2,13 +2,16 @@
 
 namespace Stripe
 {
-	public class StripePlanService
+	public class StripePlanService : StripeService
 	{
-		private string ApiKey { get; set; }
-
 		public StripePlanService(string apiKey = null)
+			: base(apiKey)
 		{
-			ApiKey = apiKey;
+		}
+
+		public StripePlanService(string apiKey, IMapper mapper, IRequestor requestor, IParameterBuilder parameterBuilder)
+			: base(apiKey, mapper, requestor, parameterBuilder)
+		{
 		}
 
 		public virtual StripePlan Create(StripePlanCreateOptions createOptions)
@@ -17,7 +20,7 @@ namespace Stripe
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripePlan>.MapFromJson(response);
+			return Mapper.MapFromJson<StripePlan>(response);
 		}
 
 		public virtual StripePlan Get(string planId)
@@ -26,7 +29,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripePlan>.MapFromJson(response);
+			return Mapper.MapFromJson<StripePlan>(response);
 		}
 
 		public virtual void Delete(string planId)
@@ -43,7 +46,7 @@ namespace Stripe
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripePlan>.MapFromJson(response);
+			return Mapper.MapFromJson<StripePlan>(response);
 		}
 
 		public virtual IEnumerable<StripePlan> List(StripeListOptions listOptions = null)
@@ -55,7 +58,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripePlan>.MapCollectionFromJson(response);
+			return Mapper.MapCollectionFromJson<StripePlan>(response);
 		}
 	}
 }

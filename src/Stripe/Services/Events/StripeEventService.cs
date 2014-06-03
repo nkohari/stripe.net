@@ -2,13 +2,16 @@
 
 namespace Stripe
 {
-	public class StripeEventService
+	public class StripeEventService : StripeService
 	{
-		private string ApiKey { get; set; }
-
 		public StripeEventService(string apiKey = null)
+			: base(apiKey)
 		{
-			ApiKey = apiKey;
+		}
+
+		public StripeEventService(string apiKey, IMapper mapper, IRequestor requestor, IParameterBuilder parameterBuilder)
+			: base(apiKey, mapper, requestor, parameterBuilder)
+		{
 		}
 
 		public virtual StripeEvent Get(string eventId)
@@ -17,7 +20,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeEvent>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeEvent>(response);
 		}
 
 		public virtual IEnumerable<StripeEvent> List(StripeEventListOptions listOptions = null)
@@ -29,7 +32,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeEvent>.MapCollectionFromJson(response);
+			return Mapper.MapCollectionFromJson<StripeEvent>(response);
 		}
 	}
 }

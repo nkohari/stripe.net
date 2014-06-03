@@ -2,13 +2,16 @@
 
 namespace Stripe
 {
-	public class StripeChargeService
+	public class StripeChargeService : StripeService
 	{
-		private string ApiKey { get; set; }
-
 		public StripeChargeService(string apiKey = null)
+			: base(apiKey)
 		{
-			ApiKey = apiKey;
+		}
+
+		public StripeChargeService(string apiKey, IMapper mapper, IRequestor requestor, IParameterBuilder parameterBuilder)
+			: base(apiKey, mapper, requestor, parameterBuilder)
+		{
 		}
 
 		public virtual StripeCharge Create(StripeChargeCreateOptions createOptions)
@@ -17,7 +20,7 @@ namespace Stripe
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripeCharge>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeCharge>(response);
 		}
 
 		public virtual StripeCharge Get(string chargeId)
@@ -26,7 +29,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeCharge>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeCharge>(response);
 		}
 
 		public virtual StripeCharge Refund(string chargeId, int? refundAmount = null, bool? refundApplicationFee = null)
@@ -35,12 +38,12 @@ namespace Stripe
 
 			if (refundAmount.HasValue)
 				url = ParameterBuilder.ApplyParameterToUrl(url, "amount", refundAmount.Value.ToString());
-			if(refundApplicationFee.HasValue)
+			if (refundApplicationFee.HasValue)
 				url = ParameterBuilder.ApplyParameterToUrl(url, "refund_application_fee", refundApplicationFee.Value.ToString());
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripeCharge>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeCharge>(response);
 		}
 
 		public virtual IEnumerable<StripeCharge> List(StripeChargeListOptions listOptions = null)
@@ -52,7 +55,7 @@ namespace Stripe
 
 			var response = Requestor.GetString(url, ApiKey);
 
-			return Mapper<StripeCharge>.MapCollectionFromJson(response);
+			return Mapper.MapCollectionFromJson<StripeCharge>(response);
 		}
 
 		public virtual StripeCharge Capture(string chargeId, int? captureAmount = null, int? applicationFee = null)
@@ -66,7 +69,7 @@ namespace Stripe
 
 			var response = Requestor.PostString(url, ApiKey);
 
-			return Mapper<StripeCharge>.MapFromJson(response);
+			return Mapper.MapFromJson<StripeCharge>(response);
 		}
 	}
 }
